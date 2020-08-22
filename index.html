@@ -85,21 +85,21 @@
         <div class="col-md-4 border border-warning" ng-repeat="car in cars">
             <br>
             <p align="center">
-              <strong> {{car.model}}</strong>
+              <strong> {{car.Model}}</strong>
               <br>
-              <img src="{{car.image}}" alt="{{car.model}}">
+              <img src="{{car.Image}}" alt="{{car.Model}}">
               <br>
               <br>
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#profileModal" data-carid="{{car.id}}">View Details</button>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#profileModal" data-carid="{{car.Id}}">View Details</button>
             </p>
             <p>
               <br>
-              <b>Category Size:</b> {{car.size}}
+              <b>Category Size:</b> {{car.Size}}
               <br>
-              <b>Distance (Kms):</b> {{car.distance}}
+              <b>Distance (Kms):</b> {{car.Distance}}
               <span style="float:right;">
-                <img id="{{car.id}}LikeIcon" ng-click="likeClicked(car.id)" src="like_icon_false.jpg" onmouseover="" style="cursor: pointer;">
-                <img id="{{car.id}}AlreadyLikedIcon" class="d-none" src="like_icon_true.jpg" >
+                <img id="{{car.Id}}LikeIcon" ng-click="likeClicked(car.Id)" src="like_icon_false.jpg" onmouseover="" style="cursor: pointer;">
+                <img id="{{car.Id}}AlreadyLikedIcon" class="d-none" src="like_icon_true.jpg" >
               </span>
             </p>
         </div>
@@ -119,16 +119,16 @@
         <!-- Modal Body -->
           <div class="modal-body">
             <p align="center">
-              <img id="profileImage" src="{{profileCar.detailsImage}}" align="center" />
+              <img id="profileImage" src="{{profileCar.DetailsImage}}" align="center" />
             </p>
             <br>
-            <p id="profileModel"><b>Model:</b> {{profileCar.model}}</p>
-            <p id="profileSizeCategory"><b>Size Category:</b> {{profileCar.size}}</p>
-            <p id="profilePlate"><b>Car Plate:</b> {{profileCar.plate}} </p>
-            <p id="profileDriver"><b>Driver:</b> {{profileCar.driver}} </p>
-            <p id="profileLikes"><b>Likes:</b> {{profileCar.likes}}</p>
+            <p id="profileModel"><b>Model:</b> {{profileCar.Model}}</p>
+            <p id="profileSizeCategory"><b>Size Category:</b> {{profileCar.Size}}</p>
+            <p id="profilePlate"><b>Car Plate:</b> {{profileCar.Plate}} </p>
+            <p id="profileDriver"><b>Driver:</b> {{profileCar.Driver}} </p>
+            <p id="profileLikes"><b>Likes:</b> {{profileCar.Likes}}</p>
             <p align="center">
-              <button id="reserveButton" align="center" type="button" ng-click="reserveClicked(profileCar.id)" class="btn btn-primary">Reserve Now!</button>
+              <button id="reserveButton" align="center" type="button" ng-click="reserveClicked(profileCar.Id)" class="btn btn-primary">Reserve Now!</button>
               <button id="reservedButton" align="center" type="button" class="btn btn-primary d-none" disabled>Car Reserved!</button>
             </p>
           </div>
@@ -149,10 +149,10 @@
   </body>
   <script>
 
-    var carshareApiEndpoint = 'REPLACE_ME'; // example: 'https://abcd12345.execute-api.us-east-1.amazonaws.com/prod'
-    var cognitoUserPoolId = 'REPLACE_ME';  // example: 'us-east-1_abcd12345'
-    var cognitoUserPoolClientId = 'REPLACE_ME'; // example: 'abcd12345abcd12345abcd12345'
-    var awsRegion = 'REPLACE_ME'; // example: 'us-east-1' or 'eu-west-1' etc.
+    var carsApiEndpoint = 'https://4l1nccbk2f.execute-api.us-west-2.amazonaws.com/prod'; // example: 'https://abcd12345.execute-api.us-east-1.amazonaws.com/prod'
+    var cognitoUserPoolId = 'us-west-2_DkFyDHjHX';  // example: 'us-east-1_abcd12345'
+    var cognitoUserPoolClientId = '533c1rfr8b4md52sqbvdnt81sb'; // example: 'abcd12345abcd12345abcd12345'
+    var awsRegion = 'us-west-2'; // example: 'us-east-1' or 'eu-west-1' etc.
 
     var app = angular.module('CarshareApp', []);
 
@@ -335,8 +335,8 @@
              "title": "Category",
              "selections":  [
                "Standard",
-               "Full",
-               "Large"
+               "SUV",
+               "Minibus"
              ]
            }
          ]
@@ -381,9 +381,9 @@
 
 
 
-      $scope.likeClicked = function(id) {
-        console.log("clicked: " + id);
-        likeCar(id, updateLikeIcons);
+      $scope.likeClicked = function(Id) {
+        console.log("clicked: " + Id);
+        likeCar(Id, updateLikeIcons);
       }
 
     });
@@ -392,17 +392,17 @@
 
       profileScope = $scope;
 
-      $scope.reserveClicked = function(id) {
-        console.log("reserve clicked: " +  id);
-        reserveCar(id, markReserved);
+      $scope.reserveClicked = function(Id) {
+        console.log("reserve clicked: " +  Id);
+        reserveCar(Id, markReserved);
       }
 
     });
 
     $('#profileModal').on('show.bs.modal', function (event) {
       var button = $(event.relatedTarget);
-      var id = button.data('id');
-      getCar(id, updateModalText);
+      var id = button.data('Id');
+      getCar(Id, updateModalText);
 
 
     });
@@ -411,7 +411,7 @@
 
       applyProfileScope(profileCar);
 
-      if (profileCar.reserved == true) {
+      if (profileCar.Reserved == true) {
         markReserved();
       } else {
         markNotReserved();
@@ -429,12 +429,12 @@
       $("#reservedButton").addClass("d-none");
     }
 
-    function updateLikeIcons(id) {
+    function updateLikeIcons(Id) {
 
-      likeIconId = "#" + id + "LikeIcon";
+      likeIconId = "#" + Id + "LikeIcon";
       $(likeIconId).addClass("d-none");
 
-      alreadyLikedIconId = "#" + id + "AlreadyLikedIcon";
+      alreadyLikedIconId = "#" + Id + "AlreadyLikedIcon";
       $(alreadyLikedIconId).removeClass("d-none");
 
     }
@@ -449,10 +449,10 @@
       profileScope.$apply();
     }
 
-    function likeCar(id, callback) {
+    function likeCar(Id, callback) {
 
       try {
-        var carsApi = carsApiEndpoint + '/cars/' + id + "/like";
+        var carsApi = carsApiEndpoint + '/cars/' + Id + "/like";
 
         var sessionTokensString = localStorage.getItem('sessionTokens');
         var sessionTokens = JSON.parse(sessionTokensString);
@@ -464,8 +464,8 @@
           type : 'POST',
           headers : {'Authorization' : idJwt },
           success : function(response) {
-            console.log("here" + id);
-            callback(id);
+            console.log("here" + Id);
+            callback(Id);
           },
           error : function(response) {
             console.log("could not like car");
@@ -482,10 +482,10 @@
 
     }
 
-    function reserveCar(id, callback) {
+    function reserveCar(Id, callback) {
 
       try {
-        var carsApi = carsApiEndpoint + '/cars/' + id + "/reserve";
+        var carsApi = carsApiEndpoint + '/cars/' + Id + "/reserve";
 
         var sessionTokensString = localStorage.getItem('sessionTokens');
         var sessionTokens = JSON.parse(sessionTokensString);
@@ -533,9 +533,9 @@
       });
     }
 
-    function getCar(id, callback) {
+    function getCar(Id, callback) {
 
-      var carsApi = carsApiEndpoint + '/cars/' + id;
+      var carsApi = carsApiEndpoint + '/cars/' + Id;
 
       $.ajax({
         url : CarsApi,
